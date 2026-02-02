@@ -1,14 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="km">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>💖 Just One Question</title>
+<title>💖 សំណួរមួយសម្រាប់អ្នក</title>
+
+<!-- Khmer Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@300;400;600;700&family=Battambang:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 * {
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Kantumruy Pro", "Battambang", system-ui, sans-serif;
 }
 
 body {
@@ -29,23 +34,26 @@ body {
   text-align: center;
   max-width: 420px;
   width: 90%;
-  min-height: 460px; /* 🔒 prevents shrink */
+  min-height: 460px;
   box-shadow: 0 15px 35px rgba(0,0,0,0.2);
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-/* wobble effect */
+/* wobble when NO escapes */
 .container.wobble {
   transform: translateX(-2px) rotate(-0.5deg);
 }
 
-/* ===== Text & Image ===== */
+/* ===== Title ===== */
 h1 {
-  font-size: 1.6rem;
+  font-size: 1.7rem;
   color: #ff4d6d;
   margin-bottom: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
+/* ===== Image ===== */
 img {
   width: 100%;
   max-width: 240px;
@@ -60,7 +68,7 @@ img {
   justify-content: center;
   align-items: center;
   gap: 24px;
-  height: 64px; /* 🔒 lock button area */
+  height: 64px; /* lock layout */
 }
 
 button {
@@ -72,6 +80,7 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.35s ease;
+  line-height: 1.2;
 }
 
 /* YES */
@@ -83,8 +92,9 @@ button {
 
 #yesBtn:hover {
   transform: translateY(-3px) scale(1.08);
-  box-shadow: 0 0 0 6px rgba(255,77,109,0.15),
-              0 18px 40px rgba(255,77,109,0.55);
+  box-shadow:
+    0 0 0 6px rgba(255,77,109,0.15),
+    0 18px 40px rgba(255,77,109,0.55);
 }
 
 /* NO */
@@ -94,9 +104,11 @@ button {
   box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
-/* Mobile tweak */
+/* Mobile text tuning */
 @media (max-width: 480px) {
-  h1 { font-size: 1.4rem; }
+  h1 {
+    font-size: 1.45rem;
+  }
 }
 </style>
 </head>
@@ -104,7 +116,10 @@ button {
 <body>
 
 <div class="container" id="container">
-  <h1 id="title">I love you 💕<br>Do you love me?</h1>
+  <h1 id="title">
+    ខ្ញុំលួចស្រឡាញ់អ្នក 💕<br>
+    តើអ្នកស្រឡាញ់ខ្ញុំទេ?
+  </h1>
 
   <img
     id="image"
@@ -113,8 +128,8 @@ button {
   />
 
   <div class="buttons">
-    <button id="yesBtn">Yes 💖</button>
-    <button id="noBtn">No 💔</button>
+    <button id="yesBtn">បាទ / ចាស ស្រឡាញ់ 💖</button>
+    <button id="noBtn">ទេ មិនស្រឡាញ់ទេ 💔</button>
   </div>
 </div>
 
@@ -127,16 +142,25 @@ const container = document.getElementById("container");
 
 let chaosMode = false;
 
-/* NO button hover */
-noBtn.addEventListener("mouseenter", () => {
+/* Desktop: hover */
+noBtn.addEventListener("mouseenter", triggerEscape);
+
+/* Mobile: tap */
+noBtn.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  triggerEscape();
+});
+
+/* Trigger chaos */
+function triggerEscape() {
   if (!chaosMode) {
     chaosMode = true;
     noBtn.style.position = "fixed";
   }
   escapeNoButton();
-});
+}
 
-/* escape logic */
+/* Escape logic */
 function escapeNoButton() {
   const padding = 20;
 
@@ -149,15 +173,14 @@ function escapeNoButton() {
   noBtn.style.left = x + "px";
   noBtn.style.top = y + "px";
 
-  // sad image
-  image.src = "https://i.pinimg.com/originals/c4/f0/d6/c4f0d6c08257f3a75725a7583894b1b8.gif";
+  image.src =
+    "https://i.pinimg.com/originals/c4/f0/d6/c4f0d6c08257f3a75725a7583894b1b8.gif";
 
-  // container wobble 💔
   container.classList.add("wobble");
   setTimeout(() => container.classList.remove("wobble"), 150);
 }
 
-/* YES hover glow 💓 */
+/* YES glow */
 yesBtn.addEventListener("mouseenter", () => {
   container.style.boxShadow =
     "0 0 0 8px rgba(255,77,109,0.15), 0 15px 35px rgba(0,0,0,0.2)";
@@ -168,12 +191,14 @@ yesBtn.addEventListener("mouseleave", () => {
     "0 15px 35px rgba(0,0,0,0.2)";
 });
 
-/* YES click 💖 */
+/* YES click */
 yesBtn.addEventListener("click", () => {
-  title.innerHTML = "YAY!!! 💕😍<br>I knew it!";
-  image.src = "https://i.pinimg.com/originals/45/e5/29/45e529c116a1758fd09bdb27e2172eca.gif";
+  title.innerHTML =
+    "យេ!!! 💕😍<br>អ្នកស្រឡាញ់ខ្ញុំហើយ!";
+  image.src =
+    "https://i.pinimg.com/originals/45/e5/29/45e529c116a1758fd09bdb27e2172eca.gif";
   noBtn.style.display = "none";
-  yesBtn.innerText = "I Love You 💞";
+  yesBtn.innerText = "ខ្ញុំស្រឡាញ់អ្នក 💞";
 });
 </script>
 
