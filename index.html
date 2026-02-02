@@ -21,6 +21,7 @@ body {
   overflow: hidden;
 }
 
+/* ===== Container ===== */
 .container {
   background: white;
   padding: 30px 25px;
@@ -28,15 +29,17 @@ body {
   text-align: center;
   max-width: 420px;
   width: 90%;
-  min-height: 460px;
+  min-height: 460px; /* 🔒 prevents shrink */
   box-shadow: 0 15px 35px rgba(0,0,0,0.2);
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 
+/* wobble effect */
 .container.wobble {
   transform: translateX(-2px) rotate(-0.5deg);
 }
 
+/* ===== Text & Image ===== */
 h1 {
   font-size: 1.6rem;
   color: #ff4d6d;
@@ -51,12 +54,13 @@ img {
   transition: 0.3s;
 }
 
+/* ===== Buttons ===== */
 .buttons {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 24px;
-  height: 64px;
+  height: 64px; /* 🔒 lock button area */
 }
 
 button {
@@ -90,7 +94,7 @@ button {
   box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
-/* mobile text size */
+/* Mobile tweak */
 @media (max-width: 480px) {
   h1 { font-size: 1.4rem; }
 }
@@ -123,24 +127,16 @@ const container = document.getElementById("container");
 
 let chaosMode = false;
 
-/* === DESKTOP: hover === */
-noBtn.addEventListener("mouseenter", triggerEscape);
-
-/* === MOBILE: tap === */
-noBtn.addEventListener("touchstart", (e) => {
-  e.preventDefault(); // stop click
-  triggerEscape();
-});
-
-/* Escape logic */
-function triggerEscape() {
+/* NO button hover */
+noBtn.addEventListener("mouseenter", () => {
   if (!chaosMode) {
     chaosMode = true;
     noBtn.style.position = "fixed";
   }
   escapeNoButton();
-}
+});
 
+/* escape logic */
 function escapeNoButton() {
   const padding = 20;
 
@@ -153,13 +149,15 @@ function escapeNoButton() {
   noBtn.style.left = x + "px";
   noBtn.style.top = y + "px";
 
+  // sad image
   image.src = "https://media.giphy.com/media/ROF8OQvDmxytW/giphy.gif";
 
+  // container wobble 💔
   container.classList.add("wobble");
   setTimeout(() => container.classList.remove("wobble"), 150);
 }
 
-/* YES hover glow */
+/* YES hover glow 💓 */
 yesBtn.addEventListener("mouseenter", () => {
   container.style.boxShadow =
     "0 0 0 8px rgba(255,77,109,0.15), 0 15px 35px rgba(0,0,0,0.2)";
