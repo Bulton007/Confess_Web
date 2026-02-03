@@ -36,10 +36,9 @@ body {
   width: 90%;
   min-height: 460px;
   box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-  transition: transform 0.15s ease, box-shadow 0.2s ease;
+  transition: transform 0.15s ease;
 }
 
-/* small shake */
 .container.wobble {
   transform: scale(0.97);
 }
@@ -66,7 +65,7 @@ img {
   justify-content: center;
   align-items: center;
   gap: 24px;
-  height: 120px;
+  height: 130px;
   position: relative;
 }
 
@@ -81,7 +80,7 @@ button {
   transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* YES — grows insanely */
+/* YES */
 #yesBtn {
   background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
   color: white;
@@ -91,11 +90,12 @@ button {
   z-index: 10;
 }
 
-/* NO — stays still */
+/* NO */
 #noBtn {
   background: #f2f2f2;
   color: #555;
   box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  transform: translateX(0);
 }
 
 /* Mobile */
@@ -133,25 +133,30 @@ const image = document.getElementById("image");
 const container = document.getElementById("container");
 
 let yesScale = 1;
+let noOffset = 0;
 
-/* NO click = banned 😈 */
+/* NO click = banned but punished 😈 */
 noBtn.addEventListener("click", (e) => {
   e.preventDefault();
 
-  // YES grows HUGE
+  // YES grows BIGGER
   yesScale += 0.6;
   yesBtn.style.transform = `scale(${yesScale})`;
+
+  // NO moves slowly to the right
+  noOffset += 18;
+  noBtn.style.transform = `translateX(${noOffset}px)`;
 
   // sad image
   image.src =
     "https://i.pinimg.com/originals/c4/f0/d6/c4f0d6c08257f3a75725a7583894b1b8.gif";
 
-  // container reaction
+  // container reacts
   container.classList.add("wobble");
   setTimeout(() => container.classList.remove("wobble"), 150);
 
-  // remove NO when YES dominates
-  if (yesScale >= 3.8) {
+  // NO disappears eventually
+  if (yesScale >= 4) {
     noBtn.style.display = "none";
   }
 });
