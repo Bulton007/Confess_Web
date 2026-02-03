@@ -39,9 +39,9 @@ body {
   transition: transform 0.15s ease, box-shadow 0.2s ease;
 }
 
-/* wobble when NO escapes */
+/* small shake */
 .container.wobble {
-  transform: translateX(-2px) rotate(-0.5deg);
+  transform: scale(0.97);
 }
 
 /* ===== Title ===== */
@@ -50,7 +50,6 @@ h1 {
   color: #ff4d6d;
   margin-bottom: 15px;
   font-weight: 600;
-  letter-spacing: 0.3px;
 }
 
 /* ===== Image ===== */
@@ -59,7 +58,6 @@ img {
   max-width: 240px;
   border-radius: 16px;
   margin-bottom: 20px;
-  transition: 0.3s;
 }
 
 /* ===== Buttons ===== */
@@ -68,47 +66,41 @@ img {
   justify-content: center;
   align-items: center;
   gap: 24px;
-  height: 64px; /* lock layout */
+  height: 120px;
+  position: relative;
 }
 
 button {
   min-width: 120px;
-  padding: 14px 30px;
+  padding: 16px 34px;
   border: none;
   border-radius: 999px;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.35s ease;
-  line-height: 1.2;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* YES */
+/* YES — grows insanely */
 #yesBtn {
   background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
   color: white;
   box-shadow: 0 10px 25px rgba(255,77,109,0.35);
+  transform: scale(1);
+  position: relative;
+  z-index: 10;
 }
 
-#yesBtn:hover {
-  transform: translateY(-3px) scale(1.08);
-  box-shadow:
-    0 0 0 6px rgba(255,77,109,0.15),
-    0 18px 40px rgba(255,77,109,0.55);
-}
-
-/* NO */
+/* NO — stays still */
 #noBtn {
   background: #f2f2f2;
   color: #555;
   box-shadow: 0 6px 15px rgba(0,0,0,0.15);
 }
 
-/* Mobile text tuning */
+/* Mobile */
 @media (max-width: 480px) {
-  h1 {
-    font-size: 1.45rem;
-  }
+  h1 { font-size: 1.45rem; }
 }
 </style>
 </head>
@@ -134,67 +126,39 @@ button {
 </div>
 
 <script>
-const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
 const title = document.getElementById("title");
 const image = document.getElementById("image");
 const container = document.getElementById("container");
 
-let chaosMode = false;
+let yesScale = 1;
 
-/* Desktop: hover */
-noBtn.addEventListener("mouseenter", triggerEscape);
-
-/* Mobile: tap */
-noBtn.addEventListener("touchstart", (e) => {
+/* NO click = banned 😈 */
+noBtn.addEventListener("click", (e) => {
   e.preventDefault();
-  triggerEscape();
-});
 
-/* Trigger chaos */
-function triggerEscape() {
-  if (!chaosMode) {
-    chaosMode = true;
-    noBtn.style.position = "fixed";
-  }
-  escapeNoButton();
-}
+  // YES grows HUGE
+  yesScale += 0.6;
+  yesBtn.style.transform = `scale(${yesScale})`;
 
-/* Escape logic */
-function escapeNoButton() {
-  const padding = 20;
-
-  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
-  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
-
-  const x = Math.random() * maxX;
-  const y = Math.random() * maxY;
-
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
-
+  // sad image
   image.src =
     "https://i.pinimg.com/originals/c4/f0/d6/c4f0d6c08257f3a75725a7583894b1b8.gif";
 
+  // container reaction
   container.classList.add("wobble");
   setTimeout(() => container.classList.remove("wobble"), 150);
-}
 
-/* YES glow */
-yesBtn.addEventListener("mouseenter", () => {
-  container.style.boxShadow =
-    "0 0 0 8px rgba(255,77,109,0.15), 0 15px 35px rgba(0,0,0,0.2)";
+  // remove NO when YES dominates
+  if (yesScale >= 3.8) {
+    noBtn.style.display = "none";
+  }
 });
 
-yesBtn.addEventListener("mouseleave", () => {
-  container.style.boxShadow =
-    "0 15px 35px rgba(0,0,0,0.2)";
-});
-
-/* YES click */
+/* YES click 💖 */
 yesBtn.addEventListener("click", () => {
-  title.innerHTML =
-    "យេ!!! 💕😍<br>អ្នកស្រឡាញ់ខ្ញុំហើយ!";
+  title.innerHTML = "យេ!!! 💕😍<br>អ្នកស្រឡាញ់ខ្ញុំហើយ!";
   image.src =
     "https://i.pinimg.com/originals/45/e5/29/45e529c116a1758fd09bdb27e2172eca.gif";
   noBtn.style.display = "none";
